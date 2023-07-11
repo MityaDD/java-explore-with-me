@@ -1,3 +1,3 @@
-FROM amazoncorretto:11.0.16
+FROM amazoncorretto:11.0.19-alpine
 COPY target/*.jar ewm-service.jar
 ENTRYPOINT ["java","-jar","/ewm-service.jar"]
