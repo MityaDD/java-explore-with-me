@@ -24,3 +24,13 @@ services:
       - POSTGRES_USER:polzovatel
       - POSTGRES_PASSWORD:parol
 
+  ewm-service:
+    build: ewm-service
+    image: ewm-service
+    container_name: ewm-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - stats-server
+      - stat-db
+
