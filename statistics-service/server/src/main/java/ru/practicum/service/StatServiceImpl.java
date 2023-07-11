@@ -37,15 +37,15 @@ public class StatServiceImpl implements StatService {
         List<ViewStats> result;
         if (uris.isEmpty()) {
             if (!unique) {
-                result = repository.getStatAll(start, end);
+                result = repository.getAllStats(start, end);
             } else {
-                result = repository.getStatAllDistinct(start, end);
+                result = repository.getAllStatsForUniqueIp(start, end);
             }
         } else {
             if (!unique) {
-                result = repository.getStat(start, end, uris);
+                result = repository.getStatByUris(start, end, uris);
             } else {
-                result = repository.getStatDistinct(start, end, uris);
+                result = repository.getStatForUniqueIp(start, end, uris);
             }
         }
         return result.stream()
