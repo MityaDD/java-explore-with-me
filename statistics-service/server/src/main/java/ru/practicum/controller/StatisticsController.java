@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-public class Controller {
+public class StatisticsController {
     private final StatService service;
     private static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 
@@ -28,10 +28,10 @@ public class Controller {
     }
 
     @GetMapping("/stats")
-    public List<HitDTO> getHit(@RequestParam(name = "start") @DateTimeFormat(pattern = PATTERN) LocalDateTime start,
-                               @RequestParam(name = "end") @DateTimeFormat(pattern = PATTERN) LocalDateTime end,
-                               @RequestParam(name = "uris", required = false, defaultValue = "") List<String> uris,
-                               @RequestParam(name = "unique", required = false, defaultValue = "false") Boolean unique) {
+    public List<HitDTO> getHit(@RequestParam @DateTimeFormat(pattern = PATTERN) LocalDateTime start,
+                               @RequestParam @DateTimeFormat(pattern = PATTERN) LocalDateTime end,
+                               @RequestParam(required = false, defaultValue = "") List<String> uris,
+                               @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         log.info("Запрошена статистика по посещениям с {} по {}", start, end);
         return service.getStats(start, end, uris, unique);
     }
