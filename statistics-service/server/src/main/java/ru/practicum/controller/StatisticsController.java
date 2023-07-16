@@ -4,16 +4,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.HitDTO;
-import ru.practicum.StatDTO;
+import ru.practicum.dto.HitDTO;
+import ru.practicum.dto.StatDTO;
 import ru.practicum.service.StatService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Validated
 @RestController
 @Slf4j
 public class StatisticsController {
