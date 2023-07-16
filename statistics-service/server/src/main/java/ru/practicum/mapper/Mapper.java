@@ -1,7 +1,7 @@
 package ru.practicum.mapper;
 
-import ru.practicum.HitDTO;
-import ru.practicum.StatDTO;
+import ru.practicum.dto.HitDTO;
+import ru.practicum.dto.StatDTO;
 import ru.practicum.model.ViewStats;
 import ru.practicum.model.EndpointHit;
 
