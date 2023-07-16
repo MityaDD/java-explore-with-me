@@ -8,9 +8,8 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stat
-      - SPRING_DATASOURCE_USERNAME=polzovatel
-      - SPRING_DATASOURCE_PASSWORD=parol
+      - STATS_SERVER_URL=http://server:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_server
 
   stats-db:
     image: postgres:15.1-alpine
@@ -18,7 +17,7 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=stat
+      - POSTGRES_DB=stats_server
       - POSTGRES_USER=polzovatel
       - POSTGRES_PASSWORD=parol
 
@@ -28,11 +27,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
+      - stats-server
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL2=jdbc:postgresql://ewm-db:5432/ewm
-      - SPRING_DATASOURCE_USERNAME=polzovatel
-      - SPRING_DATASOURCE_PASSWORD=parol
+      - STATS_SERVER_URL=http://stats-server:9090
+      - EWM_SERVICE_URL=http://server:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_service
 
   ewm-db:
     image: postgres:15.1-alpine
@@ -42,7 +42,7 @@ services:
     volumes:
       - /ewm-db-container
     environment:
-      - POSTGRES_DB=ewm
+      - POSTGRES_DB=ewm_service
       - POSTGRES_USER=polzovatel
       - POSTGRES_PASSWORD=parol
 
