@@ -11,8 +11,6 @@ import ru.practicum.dto.StatDTO;
 import ru.practicum.service.StatService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
