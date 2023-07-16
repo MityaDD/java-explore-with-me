@@ -22,7 +22,7 @@ public class CompilationsControllerPublic {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    List<CompilationDto> getComplications(@RequestParam(required = false) Boolean pinned,
+    public List<CompilationDto> getComplications(@RequestParam(required = false) Boolean pinned,
                                           @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                                           @RequestParam(defaultValue = "10") @Positive Integer size) {
         return compilationService.getCompilations(pinned, from, size);
@@ -30,7 +30,7 @@ public class CompilationsControllerPublic {
 
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
-    CompilationDto getComplicationById(@PathVariable Long compId) {
+    public CompilationDto getComplicationById(@PathVariable Long compId) {
         return compilationService.getCompilationById(compId);
     }
 }

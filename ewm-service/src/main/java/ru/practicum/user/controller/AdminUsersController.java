@@ -25,7 +25,7 @@ public class AdminUsersController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    List<UserDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> ids,
+    public List<UserDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> ids,
                            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                            @RequestParam(defaultValue = "10") @Positive Integer size) {
         return userService.getUsers(ids, from, size);
@@ -33,13 +33,13 @@ public class AdminUsersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserDto createUser(@RequestBody @Valid NewUserRequest userRequest) {
+    public UserDto createUser(@RequestBody @Valid NewUserRequest userRequest) {
         return userService.createUser(userRequest);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }
 }

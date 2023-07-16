@@ -44,7 +44,7 @@ public class PublicEventsController {
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    EventFullDto getEventById(@PathVariable Long eventId, HttpServletRequest request) {
+    public EventFullDto getEventById(@PathVariable Long eventId, HttpServletRequest request) {
         statsClient.save(request);
         return eventService.getEventById(eventId);
     }
