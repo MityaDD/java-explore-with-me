@@ -37,7 +37,7 @@ public class RequestServiceImpl implements PrivateRequestService {
                 new NotFoundException("Пользователь с id=" + userId + " не найден"));
 
         List<Request> requests = requestRepository.findAllByRequesterId(user.getId());
-        log.info("Запрошен список запросов для пользователя с id=" + userId);
+        log.info("Запрошен список запросов для пользователя с id={}", userId);
         return requests.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
@@ -61,24 +61,27 @@ public class RequestServiceImpl implements PrivateRequestService {
             throw new ConflictException("Нельзя добавить повторный запрос на участие в событии");
         }
 
-        if (!event.getState().equals(EventState.PUBLISHED)) {
+        if (event.getState() != EventState.PUBLISHED) {
             throw new ConflictException("Нельзя добавить запрос на участие в неопубликованном событии");
         }
 
-        if (event.getParticipantLimit() == 0) {
-            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+        int confirmed = event.getConfirmedRequests();
+        int limit = event.getParticipantLimit();
+
+        if (limit == 0) {
+            event.setConfirmedRequests(confirmed + 1);
             eventRepository.save(event);
             request.setStatus(RequestStatus.CONFIRMED);
-        } else if (event.getConfirmedRequests() < event.getParticipantLimit()) {
+        } else if (confirmed < limit) {
             if (!event.getRequestModeration()) {
-                event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+                event.setConfirmedRequests(confirmed + 1);
                 eventRepository.save(event);
                 request.setStatus(RequestStatus.CONFIRMED);
             }
         } else {
             throw new ConflictException("Достигнут лимит заявок на участие в событии");
         }
-        log.info("Сохранен запрос на участие пользователем id=" + userId + " в событии с id=" + eventId);
+        log.info("Сохранен запрос на участие пользователем id={} в событии с id={}", userId, eventId);
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 
@@ -91,7 +94,7 @@ public class RequestServiceImpl implements PrivateRequestService {
                 new NotFoundException("Запрос с айди " + requestId + " не найден"));
 
         request.setStatus(RequestStatus.CANCELED);
-        log.info("Отмена запроса id=" + requestId + " пользователем с id=" + userId);
+        log.info("Отмена запроса id={} пользователем с id={}", requestId, userId);
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 }
