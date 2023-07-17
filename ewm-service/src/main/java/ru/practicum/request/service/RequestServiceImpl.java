@@ -61,7 +61,7 @@ public class RequestServiceImpl implements PrivateRequestService {
             throw new ConflictException("Нельзя добавить повторный запрос на участие в событии");
         }
 
-        if (event.getState() != EventState.PUBLISHED ) {
+        if (event.getState() != EventState.PUBLISHED) {
             throw new ConflictException("Нельзя добавить запрос на участие в неопубликованном событии");
         }
 
