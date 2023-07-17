@@ -82,17 +82,17 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
         }
 
         if (eventDto.getStateAction() != null) {
-            if (event.getState() != EventState.PENDING
-                    && eventDto.getStateAction() == StateAdminRequest.PUBLISH_EVENT) {
+            if (!event.getState().equals(EventState.PENDING)
+                    && eventDto.getStateAction().equals(StateAdminRequest.PUBLISH_EVENT)) {
                 throw new ConflictException("Эвент можно публиковать только если оно в состоянии WAITING");
             }
-            if (eventDto.getStateAction() == StateAdminRequest.REJECT_EVENT) {
-                if (event.getState() == EventState.PUBLISHED) {
+            if (eventDto.getStateAction().equals(StateAdminRequest.REJECT_EVENT)) {
+                if (event.getState().equals(EventState.PUBLISHED)) {
                     throw new ConflictException("Эвент можно отклонить, только если он не опубликован");
                 } else {
                     event.setState(EventState.CANCELED);
                 }
-            } else if (eventDto.getStateAction() == StateAdminRequest.PUBLISH_EVENT) {
+            } else if (eventDto.getStateAction().equals(StateAdminRequest.PUBLISH_EVENT)) {
                 event.setState(EventState.PUBLISHED);
             }
         }
@@ -130,7 +130,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
         if (eventDto.getTitle() != null) {
             event.setTitle(eventDto.getTitle());
         }
-        log.info("Обновление эвента с id={} администратором", eventId);
+        log.info("Обновление эвента с id=" + eventId + " администратором");
         return EventMapper.toEventFullDto(eventRepository.save(event));
     }
 
@@ -141,7 +141,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
                 new NotFoundException("Пользователь с id=" + userId + " не найден"));
         List<Event> events = eventRepository.findAllByInitiatorId(user.getId(),
                 PageRequest.of(from / size, size));
-        log.info("Запрос списка эвентов пользователя с id={}", userId);
+        log.info("Запрос списка эвентов пользователя с id=" + userId);
         return events.stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
@@ -159,7 +159,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
         if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new InvalidRequestException("Эвент не может начаться раньше чем через 2 часа от текущего момента");
         }
-        log.info("Создание нового эвента пользователем с id={}", userId);
+        log.info("Создание нового эвента пользователем с id=" + userId);
         return EventMapper.toEventFullDto(eventRepository.save(event));
     }
 
@@ -170,7 +170,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
                 new NotFoundException("Пользователь с id=" + userId + " не найден"));
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("Эвент с id=" + eventId + " не найден"));
-        log.info("Запрос информации о эвенте с id={} пользователем с id={}", eventId, userId);
+        log.info("Запрос информации о эвенте с id=" + eventId + " пользователем с id=" + userId);
         return EventMapper.toEventFullDto(event);
     }
 
@@ -218,11 +218,11 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
             event.setRequestModeration(eventDto.getRequestModeration());
         }
         if (eventDto.getStateAction() != null) {
-            if (eventDto.getStateAction() == StateUserRequest.CANCEL_REVIEW) {
+            if (eventDto.getStateAction().equals(StateUserRequest.CANCEL_REVIEW)) {
                 event.setState(EventState.CANCELED);
             }
 
-            if (eventDto.getStateAction() == StateUserRequest.SEND_TO_REVIEW) {
+            if (eventDto.getStateAction().equals(StateUserRequest.SEND_TO_REVIEW)) {
                 event.setState(EventState.PENDING);
             }
         }
@@ -230,7 +230,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
         if (eventDto.getTitle() != null) {
             event.setTitle(eventDto.getTitle());
         }
-        log.info("Обновление эвента c id={} пользователем с id={}", eventId, userId);
+        log.info("Обновление эвента c id=" + eventId + " пользователем c id=" + userId);
         return EventMapper.toEventFullDto(eventRepository.save(event));
     }
 
@@ -243,7 +243,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
                 new NotFoundException("эвент c id=" + eventId + " не найден"));
 
         List<Request> events = requestRepository.findAllByEventId(eventId);
-        log.info("Запрос списков заявок на участие в эвенте c id={} пользователем с id={}", eventId, userId);
+        log.info("Запрос списков заявок на участие в эвенте c id=" + eventId + " пользователем c id=" + userId);
         return events.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
@@ -268,7 +268,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
 
         List<Request> requests = requestRepository.findAllById(requestDto.getRequestIds());
         for (Request r : requests) {
-            if (r.getStatus() == RequestStatus.PENDING) {
+            if (r.getStatus().equals(RequestStatus.PENDING)) {
                 if (event.getParticipantLimit() == 0) {
                     r.setStatus(RequestStatus.CONFIRMED);
                     event.setConfirmedRequests(event.getConfirmedRequests() + 1);
@@ -277,7 +277,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
                         r.setStatus(RequestStatus.CONFIRMED);
                         event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                     } else {
-                        if (requestDto.getStatus() == RequestStatus.CONFIRMED) {
+                        if (requestDto.getStatus().equals(RequestStatus.CONFIRMED)) {
                             r.setStatus(RequestStatus.CONFIRMED);
                             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
                         } else {
@@ -298,7 +298,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
             }
         }
         eventRepository.save(event);
-        log.info("Изменение статуса эвента с id={} пользователем с id={}", eventId, userId);
+        log.info("Изменение статуса эвента с id=" + eventId + " пользователем с id= " + userId);
 
         return new EventRequestStatusUpdateResult(confirmed.stream()
                 .map(RequestMapper::toRequestDto)
@@ -360,7 +360,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
 
         event.setViews(event.getViews() + 1);
         eventRepository.save(event);
-        log.info("Запрос эвента с id={}", eventId);
+        log.info("Запрос эвента с id=" + eventId);
         return EventMapper.toEventFullDto(event);
     }
 }

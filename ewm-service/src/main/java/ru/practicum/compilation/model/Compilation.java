@@ -24,8 +24,8 @@ public class Compilation {
             joinColumns = @JoinColumn(name = "compilation_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     List<Event> events;
-    @Column(nullable = false)
+    @Column(name = "pinned", nullable = false)
     Boolean pinned;
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     String title;
 }
