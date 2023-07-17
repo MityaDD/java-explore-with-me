@@ -61,7 +61,7 @@ public class CompilationServiceImpl implements CompilationServiceAdmin, Compilat
         if (compilationDto.getTitle() != null) {
             compilation.setTitle(compilationDto.getTitle());
         }
-        log.info("Обновлена подборка эвентов с id=" + compId);
+        log.info("Обновлена подборка эвентов с id={}", compId);
         return CompilationMapper.toComplicationDto(compilationRepository.save(compilation));
     }
 
@@ -70,14 +70,14 @@ public class CompilationServiceImpl implements CompilationServiceAdmin, Compilat
     public void deleteCompilation(Long compId) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException("Подборка эвентов с id=" + compId + " не найдена"));
-        log.info("Удалена подборка эвентов с id=" + compId);
+        log.info("Удалена подборка эвентов с id={}", compId);
         compilationRepository.deleteById(compilation.getId());
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
-        log.info("Запрошен список подборок еветов с параметром pinned=" + pinned);
+        log.info("Запрошен список подборок еветов с параметром pinned={}", pinned);
         return compilationRepository.findAllByPinned(pinned, PageRequest.of(from / size, size)).stream()
                 .map(CompilationMapper::toComplicationDto)
                 .collect(Collectors.toList());
@@ -88,7 +88,7 @@ public class CompilationServiceImpl implements CompilationServiceAdmin, Compilat
     public CompilationDto getCompilationById(Long compId) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException("Подборка эвентов с id=" + compId + " не найдена"));
-        log.info("Запрошена подборка евентов с айди " + compId);
+        log.info("Запрошена подборка евентов с id={}", compId);
         return CompilationMapper.toComplicationDto(compilation);
     }
 }

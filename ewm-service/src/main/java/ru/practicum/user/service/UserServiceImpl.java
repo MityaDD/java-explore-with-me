@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserAdminService {
     @Transactional
     @Override
     public void deleteUser(Long userId) {
-        log.info("Удален user c id=" + userId);
+        log.info("Удален user c id={}", userId);
         repository.deleteById(userId);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
-        log.info("Запрошен лист пользователей по параметрам id: " + ids);
+        log.info("Запрошен лист пользователей по параметрам ids={}", ids);
         return repository.findAllByAdmin(ids, PageRequest.of(from / size, size)).stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());

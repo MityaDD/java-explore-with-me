@@ -20,7 +20,6 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "created")
     LocalDateTime created;
     @ManyToOne
     @JoinColumn(name = "event_id", referencedColumnName = "id")
@@ -28,7 +27,6 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "requester_id", referencedColumnName = "id")
     User requester;
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     RequestStatus status;
 }

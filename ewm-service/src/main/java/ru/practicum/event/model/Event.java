@@ -20,7 +20,6 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "annotation")
     String annotation;
     @ManyToOne
     Category category;
@@ -28,7 +27,6 @@ public class Event {
     Integer confirmedRequests;
     @Column(name = "created_on")
     LocalDateTime createdOn;
-    @Column(name = "description")
     String description;
     @Column(name = "event_date")
     LocalDateTime eventDate;
@@ -36,7 +34,6 @@ public class Event {
     User initiator;
     @Embedded
     Location location;
-    @Column(name = "paid")
     Boolean paid;
     @Column(name = "participant_limit")
     Integer participantLimit;
@@ -44,11 +41,8 @@ public class Event {
     LocalDateTime publishedOn;
     @Column(name = "request_moderation")
     Boolean requestModeration;
-    @Column(name = "state")
     @Enumerated(EnumType.STRING)
     EventState state;
-    @Column(name = "title")
     String title;
-    @Column(name = "views")
     Integer views;
 }

@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryServiceAdmin, CategoryServic
         Category category = categoryRepository.findById(catId).orElseThrow(() ->
                 new NotFoundException("Категория с айди " + catId + " не найдена"));
         category.setName(categoryDto.getName());
-        log.info("Обновлена категория с id=" + catId);
+        log.info("Обновлена категория с id={}", catId);
         return CategoryMapper.toCategoryDto(categoryRepository.save(category));
     }
 
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryServiceAdmin, CategoryServic
     public void deleteCategory(Long catId) {
         Category category = categoryRepository.findById(catId).orElseThrow(() ->
                 new NotFoundException("Категория с айди " + catId + " не найдена"));
-        log.info("Удалена категория с id=" + catId);
+        log.info("Удалена категория с id={}", catId);
         categoryRepository.deleteById(category.getId());
     }
 
@@ -62,7 +62,7 @@ public class CategoryServiceImpl implements CategoryServiceAdmin, CategoryServic
     @Transactional(readOnly = true)
     @Override
     public CategoryDto getCategory(Long catId) {
-        log.info("Запрошена категория с id=" + catId);
+        log.info("Запрошена категория с id={}", catId);
         Category category = categoryRepository.findById(catId).orElseThrow(() ->
                 new NotFoundException("Категория с айди " + catId + " не найдена"));
         return CategoryMapper.toCategoryDto(category);
