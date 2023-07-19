@@ -5,4 +5,3 @@ public class NotValidException extends RuntimeException {
         super(message);
     }
 }
-
