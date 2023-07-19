@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
+
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler(NotFoundException.class)
@@ -14,7 +16,8 @@ public class ErrorHandler {
         return ApiError
                 .builder()
                 .status(HttpStatus.NOT_FOUND)
-                .reason("Data not found exception")
+                .timestamp(LocalDateTime.now())
+                //.reason("Data not found exception")
                 .message(e.getMessage())
                 .build();
     }
@@ -25,6 +28,7 @@ public class ErrorHandler {
         return ApiError
                 .builder()
                 .status(HttpStatus.CONFLICT)
+                //.timestamp(LocalDateTime.now())
                 .reason("Validation exception")
                 .message(e.getMessage())
                 .build();

@@ -153,7 +153,7 @@ public class EventServiceImpl implements AdminEventService, PrivateEventService,
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь с id=" + userId + " не найден"));
         Category category = categoryRepository.findById(eventDto.getCategory()).orElseThrow(() ->
-                new NotFoundException("Категория с id=" + userId + " не найдена"));
+                new NotFoundException("Категория с id=" + eventDto.getCategory() + " не найдена"));
         Event event = EventMapper.toEvent(eventDto, user, category);
 
         if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
