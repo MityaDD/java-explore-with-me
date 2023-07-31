@@ -39,7 +39,7 @@ public class CompilationServiceImpl implements CompilationServiceAdmin, Compilat
         compilation.setEvents(events);
         compilation.setPinned(compilationDto.getPinned());
         compilation.setTitle(compilationDto.getTitle());
-        log.info("Создана новая подборка евентов");
+        log.info("Создана новая подборка эвентов");
         return CompilationMapper.toComplicationDto(compilationRepository.save(compilation));
     }
 
@@ -77,7 +77,7 @@ public class CompilationServiceImpl implements CompilationServiceAdmin, Compilat
     @Transactional(readOnly = true)
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
-        log.info("Запрошен список подборок еветов с параметром pinned={}", pinned);
+        log.info("Запрошен список подборок эвентов с параметром pinned={}", pinned);
         return compilationRepository.findAllByPinned(pinned, PageRequest.of(from / size, size)).stream()
                 .map(CompilationMapper::toComplicationDto)
                 .collect(Collectors.toList());
